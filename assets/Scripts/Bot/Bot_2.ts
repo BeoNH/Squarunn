@@ -7,7 +7,7 @@ const { ccclass, property } = _decorator;
 @ccclass('Bot_2')
 export class Bot_2 extends BotBase {
 
-    protected onLoad(): void {
+    protected start(): void {
         super.autoShot(GameManager.timeShootB2);
     }
 

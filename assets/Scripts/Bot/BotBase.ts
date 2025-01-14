@@ -1,5 +1,5 @@
 // BotBase.ts
-import { _decorator, Component, Prefab, Node, instantiate, Vec3, find } from 'cc';
+import { _decorator, Component, Prefab, Node, instantiate, Vec3, find, tween, v3 } from 'cc';
 import { GameManager } from '../GameManager';
 import { Move } from '../Move';
 const { ccclass, property } = _decorator;
@@ -11,14 +11,22 @@ export class BotBase extends Component {
 
     @property({ type: Node, tooltip: "Node súng" })
     protected gunNode: Node = null;
-    
+
     @property({ type: Node, tooltip: "Điểm bắn đạn" })
     private arrShootPos: Node[] = [];
+
+    protected onLoad(): void {
+        this.node.setScale(new Vec3(0, 0, 0));
+
+        tween(this.node)
+            .to(0.2, { scale: new Vec3(1, 1, 0) })
+            .start();
+    }
 
     protected onDestroy(): void {
         this.unscheduleAllCallbacks();
     }
-    
+
     // Bắn đạn tự động theo thời gian
     protected autoShot(timeShoot) {
         this.schedule(() => {

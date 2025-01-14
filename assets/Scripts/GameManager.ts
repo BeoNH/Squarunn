@@ -4,9 +4,14 @@ const { ccclass, property } = _decorator;
 @ccclass('GameManager')
 export class GameManager extends Component {
 
-    // tốc độ các vật thể trong game
-    public static readonly speedPlayer: number = 500;
+    // Người chơi
+    public static readonly speedPlayer: number = 400;
+    public static readonly zoneMove = {
+        x: { min: 50, max: 1870 },
+        y: { min: 50, max: 780 }
+    };
 
+    //Đạn
     public static readonly speedBulletNomal: number = 250;
     public static readonly speedBulletFast: number[] = [100, 500];
     public static readonly speedBulletSlow: number[] = [500, 100];

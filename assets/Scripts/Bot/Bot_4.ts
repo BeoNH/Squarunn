@@ -9,12 +9,9 @@ export class Bot_4 extends BotBase {
 
     botDir: Vec3 = v3(0, 1, 0);  // Hướng di chuyển
 
-    protected onLoad(): void {
-        // super.autoShot(GameManager.timeShootB4);
-    }
-
     start() {
         this.node.getComponent(Move).setDirection(this.botDir);
+        // super.autoShot(GameManager.timeShootB4);
     }
 
     protected onEnable(): void {

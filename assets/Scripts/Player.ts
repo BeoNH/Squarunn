@@ -7,7 +7,6 @@ const { ccclass, property } = _decorator;
 export class Player extends Component {
 
     private activeKeys: Set<KeyCode> = new Set(); // Các phím đang được nhấn
-    run:boolean = true;
 
     // Gọi khi bắt đầu trò chơi
     onLoad() {
@@ -17,7 +16,19 @@ export class Player extends Component {
         const collider = this.node.getChildByPath(`body`).getComponent(Collider2D);
         if (collider) {
             collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
-            collider.on(Contact2DType.END_CONTACT, this.onEndnContact, this);
+        }
+    }
+
+    // Cập nhật vị trí nếu vượt quá giới hạn
+    update(dt: number) {
+        const wPosition = this.node.worldPosition;
+
+        let newX = Math.max(GameManager.zoneMove.x.min, Math.min(wPosition.x, GameManager.zoneMove.x.max));
+        let newY = Math.max(GameManager.zoneMove.y.min, Math.min(wPosition.y, GameManager.zoneMove.y.max));
+
+
+        if (wPosition.x !== newX || wPosition.y !== newY) {
+            this.node.worldPosition = v3(newX, newY, wPosition.z);
         }
     }
 
@@ -59,12 +70,7 @@ export class Player extends Component {
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
         if (otherCollider.node.name === "Wall") {
             console.log("Stop.");
-            this.run = false;
         }
-    }
-
-    onEndnContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-        
     }
 }
 
