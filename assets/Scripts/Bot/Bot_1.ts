@@ -11,7 +11,7 @@ export class Bot_1 extends BotBase {
 
     protected start(): void {
         this.targetNode = find('Canvas').getChildByPath('GamePlay/Player');
-        // super.autoShot(GameManager.timeShootB1);
+        super.autoShot(GameManager.timeShootB1);
     }
 
     // Theo dõi Player

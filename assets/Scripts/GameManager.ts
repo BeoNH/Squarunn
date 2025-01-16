@@ -16,6 +16,22 @@ export class GameManager extends Component {
     public static readonly speedBulletFast: number[] = [100, 500];
     public static readonly speedBulletSlow: number[] = [500, 100];
 
+    // Logic điểm
+    public static readonly scoreMultiplier: number = 10;
+
+    // ============================================================= //
+    // Cấu hình spawn (vị trí, loại bot, lật, thời gian bot huỷ, thời gian sinh bot)
+    public static readonly spawnConfig = [
+        //wave 1
+        { posIndex: 1, botIndex: 1, flip: 1, timeDestroy: 13, delay: 1 },
+        { posIndex: 2, botIndex: 3, flip: 1, timeDestroy: 25, delay: 3 },
+        { posIndex: 3, botIndex: 1, flip: 1, timeDestroy: 7, delay: 7 },
+        { posIndex: 4, botIndex: 3, flip: -1, timeDestroy: 17, delay: 12 },
+        { posIndex: 5, botIndex: 1, flip: 1, timeDestroy: 12, delay: 18 },
+        //wave 2
+
+    ];
+
     //Bot_1
     public static readonly timeShootB1: number = 1; // tốc độ bắn
 
