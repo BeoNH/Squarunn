@@ -36,6 +36,7 @@ export class Squarun extends Component {
         Squarun.Instance = this;
 
         // this.debugPhysics();
+
         this.defausData();
         this.resetGame();
     }
@@ -98,10 +99,24 @@ export class Squarun extends Component {
         }
 
 
-        // Điểm số
-        const scoreTime = Math.floor(this.elapsedTime / 10);
-        if (scoreTime > 0) {
-            this.score += scoreTime * 10 * GameManager.scoreMultiplier;
+        // Điểm
+        // Xác định điểm số dựa trên mốc thời gian
+        let scoreMultiplier: number;
+
+        if (this.elapsedTime <= 30) {
+            scoreMultiplier = 10;
+        } else if (this.elapsedTime <= 60) {
+            scoreMultiplier = 15;
+        } else if (this.elapsedTime <= 120) {
+            scoreMultiplier = 20;
+        } else {
+            scoreMultiplier = 30;
+        }
+
+        this.score = Math.floor(this.elapsedTime / 10) * scoreMultiplier;
+
+        if (this.labelScore) {
+            this.labelScore.string = `${this.score}`;
         }
 
     }
@@ -183,7 +198,7 @@ export class Squarun extends Component {
         const bot = instantiate(botPrefab);
         bot.parent = this.Map;
         bot.worldPosition = pos.worldPosition;
-        bot.scale = new Vec3(flip, flip, bot.scale.z)
+        bot.angle = flip < 0 ? 180 : 0;
 
         //Huỷ bot
         this.scheduleOnce(() => {

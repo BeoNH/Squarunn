@@ -27,6 +27,7 @@ export class Bot_1 extends BotBase {
                 const angleDeg = misc.radiansToDegrees(angleRad);
 
                 this.gunNode.angle = angleDeg;
+                this.gunNode.getChildByPath(`spawnBullet`).angle = angleDeg;
             }
         }
     }

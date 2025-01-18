@@ -11,7 +11,7 @@ export class Bot_4 extends BotBase {
 
     start() {
         this.node.getComponent(Move).setDirection(this.botDir);
-        // super.autoShot(GameManager.timeShootB4);
+        super.autoShot(GameManager.timeShootB4);
     }
 
     protected onEnable(): void {

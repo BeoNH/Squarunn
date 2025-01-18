@@ -991,6 +991,7 @@
       "__uuid__": "d46fc7ec-d3a7-4b16-8db5-38d56ac4b11b",
       "__expectedType__": "cc.Prefab"
     },
+    "bulletSpeedType": 3,
     "gunNode": {
       "__id__": 24
     },

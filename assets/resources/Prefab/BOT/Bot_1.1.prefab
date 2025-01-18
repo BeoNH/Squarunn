@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "Bot_1",
+    "_name": "Bot_1.1",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Bot_1",
+    "_name": "Bot_1.1",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -474,6 +474,7 @@
       "__uuid__": "a8ea8836-ddca-4b42-93cc-79147b283de8",
       "__expectedType__": "cc.Prefab"
     },
+    "bulletSpeedType": 1,
     "gunNode": {
       "__id__": 8
     },

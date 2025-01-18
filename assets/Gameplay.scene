@@ -3958,6 +3958,14 @@
         "__expectedType__": "cc.Prefab"
       },
       {
+        "__uuid__": "d3196f10-0b37-41c0-ac4d-0e23e3c38f1f",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "2423d2fa-cded-4187-8f7a-3782a03cfa36",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
         "__uuid__": "51c098ab-b2db-443f-bfec-5a1b5eee7253",
         "__expectedType__": "cc.Prefab"
       },

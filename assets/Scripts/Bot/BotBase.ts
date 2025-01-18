@@ -1,13 +1,25 @@
 // BotBase.ts
-import { _decorator, Component, Prefab, Node, instantiate, Vec3, find, tween, v3 } from 'cc';
+import { _decorator, Component, Prefab, Node, instantiate, Vec3, find, tween, v3, Enum, Sprite, Color, ParticleSystem2D, BoxCollider2D } from 'cc';
 import { GameManager } from '../GameManager';
 import { Move } from '../Move';
+import { Bullet } from '../Bullet';
 const { ccclass, property } = _decorator;
+
+// Định nghĩa Enum cho trạng thái đạn
+export enum BulletSpeedType {
+    Normal = 0,
+    Fast = 1,
+    Slow = 2,
+    Laze = 3,
+}
 
 export class BotBase extends Component {
 
     @property({ type: Prefab, tooltip: "Đạn" })
     private bulletPrefab: Prefab = null;
+
+    @property({ type: Enum(BulletSpeedType), tooltip: "Trạng thái tốc độ đạn" })
+    private bulletSpeedType: BulletSpeedType = BulletSpeedType.Normal;
 
     @property({ type: Node, tooltip: "Node súng" })
     protected gunNode: Node = null;
@@ -16,10 +28,10 @@ export class BotBase extends Component {
     private arrShootPos: Node[] = [];
 
     protected onLoad(): void {
-        this.node.setScale(new Vec3(0, 0, 0));
+        this.node.setScale(new Vec3(0.01, 0.01, 0.01));
 
         tween(this.node)
-            .to(0.2, { scale: new Vec3(1, 1, 0) })
+            .to(0.2, { scale: new Vec3(1, 1, 1) })
             .start();
     }
 
@@ -45,6 +57,7 @@ export class BotBase extends Component {
 
         const bullet = this.createBullet(shootPos);
         this.setBulletDirection(bullet, shootPos);
+        this.setBulletSpeed(bullet);
     }
 
     // Hàm khởi tạo viên đạn từ prefab
@@ -64,6 +77,24 @@ export class BotBase extends Component {
         const bulletScript = bullet.getComponent(Move);
         if (bulletScript) {
             bulletScript.setDirection(direction);
+        }
+    }
+
+    // Hàm đặt tốc độ đạn
+    private setBulletSpeed(bullet: Node) {
+        const bulletControl = bullet.getComponent(Bullet);
+        switch (this.bulletSpeedType) {
+            case BulletSpeedType.Normal:
+                bulletControl.normalSpeed();
+                break;
+            case BulletSpeedType.Fast:
+                bulletControl.fastSpeed();
+                break;
+            case BulletSpeedType.Slow:
+                bulletControl.slowSpeed();
+                break;
+            case BulletSpeedType.Laze:
+                break;
         }
     }
 }

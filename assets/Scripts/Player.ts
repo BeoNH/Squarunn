@@ -1,6 +1,7 @@
 import { _decorator, Collider2D, Component, Contact2DType, EventKeyboard, Input, input, IPhysics2DContact, KeyCode, Node, v3, Vec3 } from 'cc';
 import { Move } from './Move';
 import { GameManager } from './GameManager';
+import { Squarun } from './Squarun';
 const { ccclass, property } = _decorator;
 
 @ccclass('Player')
@@ -68,9 +69,18 @@ export class Player extends Component {
 
     // Xử lý logic va chạm
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-        if (otherCollider.node.name === "Wall") {
-            console.log("Stop.");
-        }
+        console.log("Stop", otherCollider.group);
+        this.scheduleOnce(()=>{
+            switch (otherCollider.group) {
+                case 4:
+                    Squarun.Instance.stopGame();
+                    selfCollider.node.active = false;
+                    break;
+                case 16:
+                    // console.log(`Bot`);
+                    break;
+            }
+        },0.01)
     }
 }
 
