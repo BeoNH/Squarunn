@@ -167,7 +167,7 @@
     "node": {
       "__id__": 1
     },
-    "_enabled": false,
+    "_enabled": true,
     "__prefab": {
       "__id__": 9
     },
@@ -201,7 +201,7 @@
     "node": {
       "__id__": 1
     },
-    "_enabled": false,
+    "_enabled": true,
     "__prefab": {
       "__id__": 11
     },
@@ -293,7 +293,6 @@
       "__id__": 0
     },
     "fileId": "36x6IsYqZEFbXUa4oyomzd",
-    "instance": null,
-    "targetOverrides": null
+    "instance": null
   }
 ]

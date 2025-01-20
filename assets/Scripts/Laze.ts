@@ -1,21 +1,24 @@
-import { _decorator, Component, Node, tween, Vec3 } from 'cc';
+import { _decorator, Component, Node, PolygonCollider2D, tween, Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('Laze')
 export class Laze extends Component {
     start() {
-        // Bắt đầu hiệu ứng mở rộng
         this.animateLaze();
     }
 
+    // Hiệu ứng mở rộng tia laze
     private animateLaze() {
-        // Bắt đầu từ scale 0
-        this.node.setScale(new Vec3(1, 0, 0));
+        let collider = this.node.getComponent(PolygonCollider2D);
+        if(!collider) collider.enabled = false;
+        this.node.setScale(new Vec3(1, 0.01, 0.01));
 
-        // Tạo hiệu ứng tween
         tween(this.node)
-            .to(0.3, { scale: new Vec3(1, 1, 0) }) 
-            .to(0.5, { scale: new Vec3(1, 0, 0) })
+            .to(0.3, { scale: new Vec3(1, 1, 0.01) }, { easing: 'quadOut' })
+            .call(()=>{
+                collider.enabled = true;
+            })
+            .to(0.7, { scale: new Vec3(1, 0.01, 0.01) }, { easing: 'quadIn' })
             .call(() => {
                 this.node.destroy();
             })

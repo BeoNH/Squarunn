@@ -10,6 +10,7 @@ export class GameManager extends Component {
         x: { min: 50, max: 1870 },
         y: { min: 50, max: 780 }
     };
+    public static readonly immortalTime: number = 3;
 
     //Đạn
     public static readonly speedBulletNomal: number[] = [200, 350];
@@ -25,14 +26,28 @@ export class GameManager extends Component {
     // ============================================================= //
     // Cấu hình spawn (vị trí, loại bot, lật, thời gian bot huỷ, thời gian sinh bot)
     public static readonly spawnConfig = [
+        // Số s thực tế = số s cuối wave + 2s anim
         //wave 1
-        { posIndex: 1, botIndex: 1, flip: 1, timeDestroy: 13, delay: 1 },
-        { posIndex: 2, botIndex: 2, flip: 1, timeDestroy: 25, delay: 3 },
-        { posIndex: 3, botIndex: 1, flip: 1, timeDestroy: 7, delay: 7 },
-        { posIndex: 4, botIndex: 3, flip: -1, timeDestroy: 17, delay: 12 },
-        { posIndex: 5, botIndex: 4, flip: 1, timeDestroy: 12, delay: 18 },
+        { posIndex: 1, botIndex: 1, flip: 1, timeDestroy: 23, delay: 1 },
+        { posIndex: 2, botIndex: 5, flip: 1, timeDestroy: 25, delay: 3 },
+        { posIndex: 3, botIndex: 1, flip: 1, timeDestroy: 17, delay: 6 },
+        { posIndex: 4, botIndex: 5, flip: -1, timeDestroy: 16, delay: 12 },//28s
         //wave 2
-
+        { posIndex: 5, botIndex: 4, flip: 1, timeDestroy: 25, delay: 28 },
+        { posIndex: 1, botIndex: 2, flip: 1, timeDestroy: 26, delay: 32 },
+        { posIndex: 3, botIndex: 3, flip: 1, timeDestroy: 25, delay: 33 },
+        { posIndex: 6, botIndex: 0, flip: 1, timeDestroy: 7, delay: 51 },
+        { posIndex: 7, botIndex: 0, flip: 1, timeDestroy: 7, delay: 51 },
+        { posIndex: 8, botIndex: 0, flip: 1, timeDestroy: 7, delay: 51 },
+        { posIndex: 9, botIndex: 0, flip: 1, timeDestroy: 7, delay: 51 },//58s
+        //wave 3
+        { posIndex: 10, botIndex: 6, flip: 1, timeDestroy: 17, delay: 58 },
+        { posIndex: 11, botIndex: 6, flip: -1, timeDestroy: 15, delay: 60 },
+        { posIndex: 6, botIndex: 1, flip: 1, timeDestroy: 15, delay: 73 },
+        { posIndex: 7, botIndex: 1, flip: 1, timeDestroy: 10, delay: 78},
+        { posIndex: 8, botIndex: 1, flip: 1, timeDestroy: 15, delay: 73 },
+        { posIndex: 9, botIndex: 1, flip: 1, timeDestroy: 10, delay: 78 },
+        { posIndex: 5, botIndex: 0, flip: 1, timeDestroy: 10, delay: 78 },//88s
     ];
 
     //Bot_1.x
@@ -48,7 +63,7 @@ export class GameManager extends Component {
     public static readonly arrMoveB3: number[] = [-800, 800]; // giới hạn di chuyển trục X
 
     //Bot_4
-    public static readonly timeShootB4: number = 5; // tốc độ bắn
+    public static readonly timeShootB4: number = 4; // tốc độ bắn
     public static readonly speedB4: number = 150; // tốc độ di chuyển
     public static readonly arrMoveB4: number[] = [-400, 200]; // giới hạn di chuyển trục Y
 

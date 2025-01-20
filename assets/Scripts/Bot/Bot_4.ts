@@ -28,7 +28,7 @@ export class Bot_4 extends BotBase {
 
     // Ghi đè phương thức createBullet
     protected createBullet(shootPos: Node): Node {
-        const parent = this.gunNode || find('Canvas');
+        const parent = this.gunNode || find('Canvas/GamePlay/Bullet');
         const bullet = super.createBullet(shootPos);
         bullet.setParent(parent);
         bullet.setWorldPosition(shootPos.worldPosition);

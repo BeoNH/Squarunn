@@ -27,15 +27,17 @@ export class Squarun extends Component {
     @property({ type: Label, tooltip: "Số lần chết của tài khoản" })
     protected labelDead: Label = null;
 
+    @property({ type: Node, tooltip: "Màn hình chơi lại" })
+    public popupGameover: Node = null;
+
     private score: number = 0 // Điểm người chơi
     private highTime: number = 0; // Thời gian chơi cao nhất trong phiên
     private elapsedTime: number = 0; // Thời gian đã trôi qua
-    private numberDead: number = 0; // Số lần chết
 
     onLoad() {
         Squarun.Instance = this;
 
-        // this.debugPhysics();
+        this.debugPhysics();
 
         this.defausData();
         this.resetGame();
@@ -59,7 +61,6 @@ export class Squarun extends Component {
     defausData() {
         this.elapsedTime = 0;
         this.highTime = Number(sys.localStorage.getItem('highTime')) ? Number(sys.localStorage.getItem('highTime')) : 0;
-        this.numberDead = Number(sys.localStorage.getItem(`Dead`)) ? Number(sys.localStorage.getItem(`Dead`)) : 0;
         this.score = Number(sys.localStorage.getItem(`Score`)) ? Number(sys.localStorage.getItem(`Score`)) : 0;
     }
 
@@ -71,6 +72,7 @@ export class Squarun extends Component {
 
     // Bắt đầu chơi
     startGame() {
+        this.popupGameover.active = false;
         this.elapsedTime = 0;
         this.schedule(this.updateTimer, 1);
         this.runWave();
@@ -81,8 +83,9 @@ export class Squarun extends Component {
         this.clearBots();
 
         // Mạng
+        let numberDead = Number(sys.localStorage.getItem(`Dead`)) ? Number(sys.localStorage.getItem(`Dead`)) : 0;
         if (this.labelDead) {
-            this.labelDead.string = `${this.numberDead}`;
+            this.labelDead.string = `${numberDead}`;
         }
 
 

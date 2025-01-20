@@ -62,9 +62,9 @@ export class BotBase extends Component {
 
     // Hàm khởi tạo viên đạn từ prefab
     protected createBullet(shootPos: Node): Node {
-        const canvas = find('Canvas');
+        const parent = find('Canvas/GamePlay/Bullet');
         const bullet = instantiate(this.bulletPrefab);
-        bullet.setParent(canvas);
+        bullet.setParent(parent);
         bullet.setWorldPosition(shootPos.worldPosition);
         return bullet;
     }
