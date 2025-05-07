@@ -1,7 +1,9 @@
-import { _decorator, Collider2D, Color, Component, Contact2DType, EventKeyboard, Input, input, IPhysics2DContact, KeyCode, Node, ParticleSystem2D, Sprite, sys, v3, Vec3 } from 'cc';
+import { _decorator, Collider2D, Color, Component, Contact2DType, EventKeyboard, EventTouch, Input, input, IPhysics2DContact, KeyCode, Node, ParticleSystem2D, Sprite, sys, v3, Vec3 } from 'cc';
 import { Move } from './Move';
 import { GameManager } from './GameManager';
 import { Squarun } from './Squarun';
+import { UIControler } from './UIControler';
+import { Joystick, JOYSTICK_EVENTS } from './Joystick';
 const { ccclass, property } = _decorator;
 
 @ccclass('Player')
@@ -28,8 +30,6 @@ export class Player extends Component {
         if (!this.particle) {
             this.particle = this.node.getChildByPath(`Particle2D`).getComponent(ParticleSystem2D);
         }
-
-        this.activatePlayer();
     }
 
     // Cập nhật vị trí nếu vượt quá giới hạn
@@ -51,6 +51,7 @@ export class Player extends Component {
         input.off(Input.EventType.KEY_UP, this.onKeyUp, this);
         input.on(Input.EventType.KEY_UP, this.onKeyUp, this);
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
+        this.connectToJoystick();
 
         this.node.setPosition(Vec3.ZERO);
         this.playerBody.active = true
@@ -61,6 +62,7 @@ export class Player extends Component {
     // Vô hiệu hoá người chơi
     disablePlayer() {
         input.off(Input.EventType.KEY_DOWN, this.onKeyDown, this);
+        this.disconnectJoystick();
 
         this.playerBody.active = false;
         if (this.particle) {
@@ -71,25 +73,52 @@ export class Player extends Component {
     // Bấm nút
     private onKeyDown(event: EventKeyboard) {
         this.activeKeys.add(event.keyCode);
-        this.updateMoveDir();
+        this.updateMoveDir(this.activeKeys);
     }
 
     // Nhả nút
     private onKeyUp(event: EventKeyboard) {
         this.activeKeys.delete(event.keyCode);
-        this.updateMoveDir();
+        this.updateMoveDir(this.activeKeys);
     }
 
     // Cập nhật hướng di chuyển
-    private updateMoveDir() {
+    public updateMoveDir(activeKeys) {
         const playerMoveDir = v3(Vec3.ZERO);
-        if (this.activeKeys.has(KeyCode.ARROW_LEFT)) playerMoveDir.x -= 1;
-        if (this.activeKeys.has(KeyCode.ARROW_RIGHT)) playerMoveDir.x += 1;
-        if (this.activeKeys.has(KeyCode.ARROW_UP)) playerMoveDir.y += 1;
-        if (this.activeKeys.has(KeyCode.ARROW_DOWN)) playerMoveDir.y -= 1;
+        if (activeKeys && activeKeys.has(KeyCode.ARROW_LEFT)) playerMoveDir.x -= 1;
+        if (activeKeys && activeKeys.has(KeyCode.ARROW_RIGHT)) playerMoveDir.x += 1;
+        if (activeKeys && activeKeys.has(KeyCode.ARROW_UP)) playerMoveDir.y += 1;
+        if (activeKeys && activeKeys.has(KeyCode.ARROW_DOWN)) playerMoveDir.y -= 1;
 
         this.node.getComponent(Move).setDirection(playerMoveDir);
     }
+
+    // Kết nối Player với Joystick
+    private connectToJoystick() {
+        if (Joystick.instance) {
+            Joystick.instance.on(JOYSTICK_EVENTS.MOVE, this.onJoystickMoveEvent, this);
+            Joystick.instance.on(JOYSTICK_EVENTS.END, this.onJoystickEndEvent, this);
+        }
+    }
+
+    // Hủy lắng nghe khi không cần thiết
+    private disconnectJoystick() {
+        if (Joystick.instance) {
+            Joystick.instance.off(JOYSTICK_EVENTS.MOVE, this.onJoystickMoveEvent, this);
+            Joystick.instance.off(JOYSTICK_EVENTS.END, this.onJoystickEndEvent, this);
+        }
+    }
+
+    // Phương thức lắng nghe sự kiện từ Joystick
+    private onJoystickMoveEvent(joystickEvent: any): void {
+        this.node.getComponent(Move).setDirection(joystickEvent.direction);
+    }
+
+    // Phương thức lắng nghe sự kiện từ Joystick
+    private onJoystickEndEvent(): void {
+        this.node.getComponent(Move).setDirection(Vec3.ZERO);
+    }
+
 
     // HIệu ứng xuất hiện / khi trúng đạn
     private blinkEffect() {
@@ -136,10 +165,13 @@ export class Player extends Component {
                     console.log(`Bot`);
 
                     Squarun.Instance.stopGame();
-                    Squarun.Instance.popupGameover.active = true;
+                    UIControler.instance.onOpen(null, `over`);
+                    let time = Squarun.Instance.getTimer();
+                    UIControler.instance.timeResults(time.sTime, time.bTime);
                     let numDead = Number(sys.localStorage.getItem(`Dead`)) ? Number(sys.localStorage.getItem(`Dead`)) : 0;
                     sys.localStorage.setItem(`Dead`, `${numDead + 1}`);
                     this.disablePlayer();
+                    this.updateMoveDir(null);
 
                     break;
             }

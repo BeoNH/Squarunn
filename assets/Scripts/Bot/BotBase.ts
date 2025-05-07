@@ -3,6 +3,7 @@ import { _decorator, Component, Prefab, Node, instantiate, Vec3, find, tween, v3
 import { GameManager } from '../GameManager';
 import { Move } from '../Move';
 import { Bullet } from '../Bullet';
+import { AudioController } from '../AudioController';
 const { ccclass, property } = _decorator;
 
 // Định nghĩa Enum cho trạng thái đạn
@@ -40,12 +41,20 @@ export class BotBase extends Component {
     }
 
     // Bắn đạn tự động theo thời gian
-    protected autoShot(timeShoot) {
+    protected autoShot(timeShoot: number) {
+        let time = timeShoot - GameManager.numWave * timeShoot;
         this.schedule(() => {
+
+            if(this.bulletSpeedType === BulletSpeedType.Laze){
+                AudioController.Instance.Laze();
+            }else{
+                AudioController.Instance.Fire();
+            }
+
             this.arrShootPos.forEach(pos => {
                 this.Shot(pos);
             });
-        }, timeShoot);
+        }, time);
     }
 
     // Phương thức bắn đạn
