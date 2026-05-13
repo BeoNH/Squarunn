@@ -4,6 +4,7 @@ import { GameManager } from './GameManager';
 import { Squarun } from './Squarun';
 import { UIControler } from './UIControler';
 import { Joystick, JOYSTICK_EVENTS } from './Joystick';
+import { APIManager } from './API/APIManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('Player')
@@ -166,8 +167,9 @@ export class Player extends Component {
 
                     Squarun.Instance.stopGame();
                     UIControler.instance.onOpen(null, `over`);
-                    let time = Squarun.Instance.getTimer();
+                    const time = Squarun.Instance.getTimer();
                     UIControler.instance.timeResults(time.sTime, time.bTime);
+                    this.logSaveScore(time);
                     let numDead = Number(sys.localStorage.getItem(`Dead`)) ? Number(sys.localStorage.getItem(`Dead`)) : 0;
                     sys.localStorage.setItem(`Dead`, `${numDead + 1}`);
                     this.disablePlayer();
@@ -176,6 +178,29 @@ export class Player extends Component {
                     break;
             }
         }, 0.01)
+    }
+
+    logSaveScore(time: any) {
+        const url = `/saveScore`;
+        const data = {
+            "username": APIManager.userDATA?.username,
+            "score": 0,
+            "time": time.eTime
+        };
+        APIManager.requestData(url, data, res => {
+            console.log("Kết thúc game => Gửi server:", data, res);
+        });
+
+
+        // Sự kiện BATTA
+        if (time.eTime >= 70) {
+            APIManager.logChallenge(`squarun70s`, 1);
+        } else if (time.eTime >= 50) {
+            APIManager.logChallenge(`squarun50s`, 1);
+        } else if (time.eTime >= 30) {
+            APIManager.logChallenge(`squarun30s`, 1);
+        }
+        APIManager.logChallenge(`squarunTotal1s`, time.eTime);
     }
 }
 

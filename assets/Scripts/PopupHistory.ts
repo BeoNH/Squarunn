@@ -13,7 +13,7 @@ export class PopupHistory extends Component {
 
     // Khởi tạo bảng
     initHistoryList() {
-        const url = `/imageToWord/getHistory`;
+        const url = `/getHistory`;
         const data = {
             "username": APIManager.userDATA?.username,
             // "username": "beonh123",

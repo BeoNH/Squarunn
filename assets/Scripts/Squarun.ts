@@ -129,6 +129,7 @@ export class Squarun extends Component {
         return {
             sTime: this.formatTime(this.elapsedTime),
             bTime: this.formatTime(this.highTime),
+            eTime: this.elapsedTime
         }
     }
 

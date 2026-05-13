@@ -5,7 +5,7 @@ const { ccclass, property } = _decorator;
 @ccclass('APIManager')
 export class APIManager extends Component {
 
-    public static urlAPI: string = "https://apiwordpuzzle-tele.gamebatta.com";// batta
+    public static urlAPI: string =  APIManager.urlParam(`url_api`) || "https://apiwordpuzzle-tele.gamebatta.com/api-minigame";// batta
 
     public static userDATA: {
         id?: number;
@@ -15,7 +15,8 @@ export class APIManager extends Component {
 
     public static requestData(key: string, data: any, callBack: (response: any) => void) {
         const url = this.urlAPI + key;
-
+        // const url = "https://" + this.urlParam("url_api") + key;
+        
         APIManager.CallRequest(`POST`, data, url, (response) => {
             callBack(response);
         }, (xhr) => {
@@ -57,7 +58,11 @@ export class APIManager extends Component {
         callbackHeader(xhr);
         let body
         if (data != null)
-            body = JSON.stringify(data);
+            body = JSON.stringify({
+                ...data,
+                "source": APIManager.urlParam("url_api"),
+                "game_name": "squa-run"
+            });
         else
             body = data
         // console.log(method, "body: ", body)
@@ -65,7 +70,7 @@ export class APIManager extends Component {
     }
 
     public static logChallenge(name: string, score: number) {
-        APIManager.requestData(`/api/updateEventChallenge`, {
+        APIManager.requestData(`/updateEventChallenge`, {
             "username": APIManager.userDATA?.username,
             "name": name,
             "score": score

@@ -83,7 +83,7 @@ export class GameControler extends Component {
 
     // Đăng nhập Batta lấy thông tin
     private loginBatta() {
-        const url = `/squarun/login`;
+        const url = `/login`;
         const data = {
             "token": APIManager.urlParam(`token`),
         };
@@ -92,6 +92,7 @@ export class GameControler extends Component {
             if (!res) {
                 return;
             }
+            this.sceneMenu.getChildByPath(`btnPlay`).active = true;
             APIManager.userDATA = res;
             // this.remainTurn();
         });
