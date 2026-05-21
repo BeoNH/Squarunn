@@ -184,7 +184,7 @@ export class Player extends Component {
         const url = `/saveScore`;
         const data = {
             "username": APIManager.userDATA?.username,
-            "score": 0,
+            "score": time.eTime,
             "time": time.eTime
         };
         APIManager.requestData(url, data, res => {

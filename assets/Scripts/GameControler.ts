@@ -1,4 +1,4 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, sys } from 'cc';
 import { Squarun } from './Squarun';
 import { DEBUG } from 'cc/env';
 import { APIManager } from './API/APIManager';
@@ -45,10 +45,10 @@ export class GameControler extends Component {
     }
 
     openMenu() {
-        this.scheduleOnce(()=>{
+        this.scheduleOnce(() => {
             this.sceneMenu.active = true;
             this.scenePlay.active = false;
-        },0.1)
+        }, 0.1)
         // this.remainTurn();
     }
 
@@ -83,6 +83,7 @@ export class GameControler extends Component {
 
     // Đăng nhập Batta lấy thông tin
     private loginBatta() {
+        this.sceneMenu.getChildByPath(`btnPlay`).active = false;
         const url = `/login`;
         const data = {
             "token": APIManager.urlParam(`token`),
@@ -94,7 +95,21 @@ export class GameControler extends Component {
             }
             this.sceneMenu.getChildByPath(`btnPlay`).active = true;
             APIManager.userDATA = res;
-            // this.remainTurn();
+            this.getHighTime();
+        });
+    }
+
+    // Lấy thông tin điểm cao đầu game
+    private getHighTime() {
+        const url = `/getHighestScore`;
+        const data = {
+            "username": APIManager.userDATA?.username,
+        };
+        APIManager.requestData(url, data, res => {
+            if (!res) {
+                return;
+            }
+            sys.localStorage.setItem("highTime", res?.yourInfo?.numScore);
         });
     }
 

@@ -5,7 +5,7 @@ const { ccclass, property } = _decorator;
 @ccclass('APIManager')
 export class APIManager extends Component {
 
-    public static urlAPI: string =  APIManager.urlParam(`url_api`) || "https://apiwordpuzzle-tele.gamebatta.com/api-minigame";// batta
+    public static urlAPI: string = "https://apiwordpuzzle-tele.gamebatta.com/api-minigame";// batta
 
     public static userDATA: {
         id?: number;
@@ -15,12 +15,10 @@ export class APIManager extends Component {
 
     public static requestData(key: string, data: any, callBack: (response: any) => void) {
         const url = this.urlAPI + key;
-        // const url = "https://" + this.urlParam("url_api") + key;
-        
+
         APIManager.CallRequest(`POST`, data, url, (response) => {
             callBack(response);
         }, (xhr) => {
-            // xhr.setRequestHeader('Authorization', 'Bearer ' + APIManager.urlParam(`token`));
             xhr.setRequestHeader("Content-type", "application/json");
         });
     }
@@ -48,7 +46,7 @@ export class APIManager extends Component {
                 console.log(`Call.${method}=>`, url, "\n", response);
                 callback(response);
             }
-            else{
+            else {
                 response = JSON.parse(xhr.responseText);
                 response.status = xhr.status;
                 callback(null);
@@ -59,6 +57,7 @@ export class APIManager extends Component {
         let body
         if (data != null)
             body = JSON.stringify({
+                ...this.PARAMS,
                 ...data,
                 "source": APIManager.urlParam("url_api"),
                 "game_name": "squa-run"
@@ -81,4 +80,13 @@ export class APIManager extends Component {
         var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.search);
         return (results !== null) ? results[1] || 0 : false;
     }
+
+    static PARAMS = (() => {
+        const params = new URLSearchParams(window.location.search);
+        const obj = {};
+        for (const [key, value] of params) {
+            obj[key] = value;
+        }
+        return obj;
+    })();
 }
