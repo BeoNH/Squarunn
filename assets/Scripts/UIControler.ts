@@ -1,4 +1,6 @@
 import { _decorator, Component, Label, Node } from 'cc';
+import { PopupRank } from './PopupRank';
+import { PopupHistory } from './PopupHistory';
 const { ccclass, property } = _decorator;
 
 @ccclass('UIControler')
@@ -30,11 +32,11 @@ export class UIControler extends Component {
                 break;
             case `rank`:
                 this.popupRank.active = true;
-                // this.popupRank.getComponent(PopupRank).initRankingList();
+                this.popupRank.getComponent(PopupRank).initRankingList();
                 break;
             case `history`:
                 this.popupHistory.active = true;
-                // this.popupHistory.getComponent(PopupHistory).initHistoryList();
+                this.popupHistory.getComponent(PopupHistory).initHistoryList();
                 break;
             case `over`:
                 this.popupGameOver.active = true;
