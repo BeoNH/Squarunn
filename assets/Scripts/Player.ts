@@ -172,6 +172,7 @@ export class Player extends Component {
                     this.logSaveScore(time);
                     let numDead = Number(sys.localStorage.getItem(`Dead`)) ? Number(sys.localStorage.getItem(`Dead`)) : 0;
                     sys.localStorage.setItem(`Dead`, `${numDead + 1}`);
+                    Squarun.Instance.updateScore();
                     this.disablePlayer();
                     this.updateMoveDir(null);
 

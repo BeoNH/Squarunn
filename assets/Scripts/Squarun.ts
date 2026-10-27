@@ -108,6 +108,7 @@ export class Squarun extends Component {
     startGame() {
         this.elapsedTime = 0;
         GameManager.numWave = 0;
+        this.updateScore();
         this.schedule(this.updateTimer, 1);
         this.runWave();
     }
@@ -120,6 +121,11 @@ export class Squarun extends Component {
         if (this.highTime < this.elapsedTime) {
             this.highTime = this.elapsedTime;
             sys.localStorage.setItem('highTime', String(this.highTime));
+        }
+        const score = this.calcScore();
+        if (score > this.score) {
+            this.score = score;
+            sys.localStorage.setItem('Score', String(score));
         }
         this.mobileGuide.active = false;
     }
@@ -142,11 +148,8 @@ export class Squarun extends Component {
 
     // Update thành tích
     updateScore() {
-        let txtScore = Number(sys.localStorage.getItem('Score')) ? Number(sys.localStorage.getItem('Score')) : 0;
-        let numActive = this.score + 1;
-
         if (this.labelScore) {
-            this.labelScore.string = `${numActive}`;
+            this.labelScore.string = `${this.score}`;
         }
 
         if (this.labelDead) {
@@ -156,9 +159,13 @@ export class Squarun extends Component {
         if (this.labelHighTime) {
             this.labelHighTime.string = this.formatTime(this.highTime);
         }
+    }
 
-        this.score = numActive;
-        sys.localStorage.setItem('Score', String(numActive > txtScore ? numActive : txtScore));
+    // Điểm của ván theo thời gian sống sót
+    calcScore(): number {
+        const t = this.elapsedTime;
+        const multiplier = t <= 30 ? 10 : t <= 60 ? 15 : t <= 120 ? 20 : 30;
+        return Math.floor(t / 10) * multiplier;
     }
 
     // Cập nhật giao diện thời gian chơi
